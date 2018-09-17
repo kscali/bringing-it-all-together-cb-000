@@ -61,8 +61,23 @@ class Dog
     end 
   end  
   
-  def 
+  def self.create(name:, breed:) 
+    dog = Dog.new(name, breed)
+    dog.save
+    dog
+  end   
   
+  def self.find_by_id(id)
+    sql = <<-SQL
+      SELECT *
+      FROM dogs
+      WHERE id = ?
+      LIMIT 1
+    SQL
+    DB[:conn].execute(sql,id).execute |row|
+      self.new_from_db(row)
+    end.first  
+  end   
 end   
   
   
